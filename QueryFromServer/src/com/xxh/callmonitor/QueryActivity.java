@@ -109,7 +109,10 @@ public class QueryActivity extends Activity {
     }
     
     
-  //发送数据 
+    /*
+     * 这里采用的是即连即断的方式，如果环境稳定，可以在程序运行时创建连接，保持连接，退出时断开连接，这样在通讯上要快一些。
+     * */
+    //发送数据 
     public String sendMsg(String msg)
     {
     	try
@@ -121,6 +124,7 @@ public class QueryActivity extends Activity {
     	    out.println(msg);   
     	    //TODO:for test
     	    //等待5秒,接收服务器数据
+    	    //这里应该判断接收数据，这样有问题，暂时这样处理
     	    SystemClock.sleep(5000);
     	    myThread myTread=new myThread();
     		Log.i(TAG,"启动线程");
