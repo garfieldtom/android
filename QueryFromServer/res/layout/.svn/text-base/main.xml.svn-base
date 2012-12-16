@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/pState"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pstate" />
+
+    <Button
+        android:id="@+id/btnSystemSet"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onServiceButtonClick" 
+        android:text="@string/btnsystemset" />
+
+    <Button
+        android:id="@+id/btnTest"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onServiceButtonClick"
+        android:text="@string/btntest" />
+
+    <Button
+        android:id="@+id/btnHide"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onServiceButtonClick" 
+        android:text="@string/btnhide" />
+
+    <Button
+        android:id="@+id/btnAbout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onServiceButtonClick" 
+        android:text="@string/btnabout" />
+
+    <Button
+        android:id="@+id/btnClose"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onServiceButtonClick" 
+        android:text="@string/btnclose" />
+
+ </LinearLayout>

@@ -1,0 +1,99 @@
+package com.xxh.callmonitor;
+
+import java.net.Socket;
+
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
+
+public class QueryActivity extends Activity {
+
+	private static final String TAG="MobileQuery";
+	private String Host="192.168.245.133";
+	private int Port=2222;
+	private Socket socket = null;
+	private boolean socketState=false;
+	private TextView edtCommand=null;
+	private TextView mtxtContent=null;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_query);
+		
+		edtCommand=(TextView)findViewById(R.id.edtCommand);
+		edtQueryResult=(TextView)findViewById(R.id.mtxtContent);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.activity_query, menu);
+		return true;
+	}
+	
+	
+	public void OnQueryButtonClick(View v)
+	{
+		Log.i(TAG,String.format("点击按钮:%d",v.getId()));
+		switch(v.getId())
+   	    {
+        case R.id.btnSend :
+        	//TODO:发送指令
+            break;
+        case R.id.btnSelectCommand:
+        	//TODO:选择指令
+            break;
+        case R.id.btnClose:
+        	//关闭
+        	finish();
+   	    }
+	}
+	
+	
+	//TODO:Host作为参数传人
+    private boolean InitSocket()
+    {
+    	//InetAddress serverAddr =null;
+    	//初始化设置,这样可以修改设置后不用退出程序了
+    	SharedPreferences settings=getSharedPreferences(SHAREDPREFERENCES,Activity.MODE_PRIVATE);
+		Host=settings.getString("Host", "127.0.0.1");
+        Port=settings.getInt("Port",2222);
+        
+		Log.d("TCP", "C: Connecting...");   
+		try
+    	{
+			Log.i(TAG, "Connect to Host:"+Host);
+			//serverAddr = InetAddress.getByName(Host);//TCPServer.SERVERIP
+			//socket = new Socket(serverAddr, Port);
+			socket = new Socket(Host, Port);
+			Log.i(TAG, "Socket连接成功");
+			return true;
+    	}catch(Exception e)
+    	{
+    		Log.i(TAG, "Socket连接失败",e);
+    		return false;
+    	}
+		
+    }
+    
+    private boolean CloseSocket()
+    {
+    		try
+    	    {
+    	    	socket.close();
+    	    	return true;
+    	    } catch(Exception e) 
+    	    {   
+    	        Log.e("TCP", "S: Error", e);
+    	        return false;
+    	    }
+    }
+    
+
+}

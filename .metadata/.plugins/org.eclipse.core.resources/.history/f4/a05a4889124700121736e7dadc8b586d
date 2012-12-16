@@ -1,0 +1,207 @@
+package com.xxh.callmonitor;
+
+import java.io.BufferedWriter;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+import com.xxh.callmonitor.MainActivity.myThread;
+
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.SystemClock;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class QueryActivity extends Activity {
+
+	private static final String TAG="MobileQuery";
+	private static final String SHAREDPREFERENCES="MobileQuery";
+	private String Host="192.168.245.133";
+	private int Port=2222;
+	private Socket socket = null;
+	private boolean socketState=false;
+	private TextView edtCommand=null;
+	private TextView mtxtContent=null;
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_query);
+		
+		edtCommand=(TextView)findViewById(R.id.edtCommand);
+		mtxtContent=(TextView)findViewById(R.id.mtxtContent);
+		
+		SharedPreferences settings=getSharedPreferences(SHAREDPREFERENCES,Activity.MODE_PRIVATE);
+		Host=settings.getString("Host", "127.0.0.1");
+        Port=settings.getInt("Port",2222);
+        
+        Log.i(TAG,"Host:"+Host);
+        Log.i(TAG,"Port:"+Port);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.activity_query, menu);
+		return true;
+	}
+	
+	
+	public void OnQueryButtonClick(View v)
+	{
+		Log.i(TAG,String.format("点击按钮:%d",v.getId()));
+		switch(v.getId())
+   	    {
+        case R.id.btnSend :
+        	//TODO:发送指令
+        	sendMsg(edtCommand.getText().toString());
+            break;
+        case R.id.btnSelectCommand:
+        	//TODO:选择指令
+            break;
+        case R.id.btnClose:
+        	//关闭
+        	finish();
+   	    }
+	}
+	
+	
+	//TODO:Host作为参数传人
+    private boolean InitSocket()
+    {
+    	//InetAddress serverAddr =null;
+    	//初始化设置,这样可以修改设置后不用退出程序了
+    	SharedPreferences settings=getSharedPreferences(SHAREDPREFERENCES,Activity.MODE_PRIVATE);
+		Host=settings.getString("Host", "127.0.0.1");
+        Port=settings.getInt("Port",2222);
+        
+		Log.d("TCP", "C: Connecting...");   
+		try
+    	{
+			Log.i(TAG, "Connect to Host:"+Host);
+			//serverAddr = InetAddress.getByName(Host);//TCPServer.SERVERIP
+			//socket = new Socket(serverAddr, Port);
+			socket = new Socket(Host, Port);
+			Log.i(TAG, "Socket连接成功");
+			return true;
+    	}catch(Exception e)
+    	{
+    		Log.i(TAG, "Socket连接失败",e);
+    		return false;
+    	}
+		
+    }
+    
+    private boolean CloseSocket()
+    {
+    		try
+    	    {
+    	    	socket.close();
+    	    	return true;
+    	    } catch(Exception e) 
+    	    {   
+    	        Log.e("TCP", "S: Error", e);
+    	        return false;
+    	    }
+    }
+    
+    
+  //发送数据 
+    public String sendMsg(String msg)
+    {
+    	try
+    	{
+    		//TODO:测试,只在这里调用
+    		InitSocket();
+    		Log.d("TCP", "C: Sending: '" + msg + "'");   
+    	    PrintWriter out = new PrintWriter( new BufferedWriter( new OutputStreamWriter(socket.getOutputStream())),true);   
+    	    out.println(msg);   
+    	    //TODO:for test
+    	    //等待5秒,接收服务器数据
+    	    SystemClock.sleep(5000);
+    	    myThread myTread=new myThread();
+    		Log.i(TAG,"启动线程");
+    		myTread.run();
+    		
+    	} catch (Exception e) 
+    	{
+			// TODO Auto-generated catch block
+    		Log.e("TCP", "S: Error", e);  
+		}finally
+		{
+			CloseSocket();
+		}
+    	
+
+    	return "";
+    }
+    
+    
+  //创建读取线程
+    public class myThread extends Thread
+    {
+    	//构造函数
+    	public myThread()
+    	{
+    		
+    	}
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			super.run();
+			//一直循环
+			boolean bTread=true;
+			while(bTread)
+			{
+				Log.i(TAG,"进入线程循环");
+				try
+				{
+					sleep(100);
+					//读取输入流
+					//String s = ""; 
+					Log.i(TAG,"开始读取数据....");
+					InputStream ips = socket.getInputStream(); 
+					Log.i(TAG,"获取输入流...");
+					byte[] buffer=new byte[ips.available()];
+					Log.i(TAG,"读取输入流...");
+					ips.read(buffer);
+					String s=new String(buffer);
+					Log.i(TAG,"判断输入流...");
+					//TODO:测试
+					//createView();
+					//s="hello,this is a test";
+					if(s!="")
+					{	
+							Log.i(TAG,"收到消息"+s);
+							//Toast.makeText(QueryActivity.this,s,Toast.LENGTH_LONG).show();
+							mtxtContent.append(s);
+					}else
+					{
+						Log.i(TAG,"没有收到消息");
+					}
+				}catch(Exception e)
+				{
+					
+				}
+				
+				//TODO:for test
+				bTread=false;
+			}	
+		}
+		
+		@Override
+		public synchronized void start() {
+			// TODO Auto-generated method stub
+			super.start();
+		}
+    	
+    }
+    
+
+}

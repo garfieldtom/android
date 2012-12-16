@@ -1,0 +1,81 @@
+package com.xxh.callmonitor;
+
+import android.app.Activity;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class SystemSetActivity extends Activity {
+
+	private static final String SHAREDPREFERENCES="CallMonitor";
+	private String TAG="系统设置";
+	private String sHost;
+	private int iPort;
+	
+	private TextView edtHost=null;
+	private TextView edtPort=null;
+	private Button btnSave=null;
+	private Button btnCancel=null;
+	
+	
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.systemset);
+        
+        edtHost=(TextView)findViewById(R.id.edtHost);
+        edtPort=(TextView)findViewById(R.id.edtPort);
+        btnSave=(Button)findViewById(R.id.btnSave);
+        btnCancel=(Button)findViewById(R.id.btnCancel);
+        
+        InitSystemSettings();
+        edtHost.setText(sHost);
+        edtPort.setText(String.format("%d", iPort));
+        
+        btnSave.setOnClickListener(new OnClickListener(){
+        	//@Override
+        	public void onClick(View v) {
+    			//TODO 保存配置
+        		sHost=edtHost.getText().toString();
+        		iPort=Integer.parseInt(edtPort.getText().toString());
+        		SaveSettings();
+        		
+        		Toast.makeText(SystemSetActivity.this,"已保存设置!", Toast.LENGTH_SHORT);
+        		Log.i(TAG,"保存设置.");
+        		finish();
+    		}
+        });
+    }
+    
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.systemset, menu);
+        return true;
+    }
+    
+    
+    
+    private void SaveSettings()
+	{
+		SharedPreferences uiState=getSharedPreferences(SHAREDPREFERENCES,Activity.MODE_PRIVATE);
+		SharedPreferences.Editor editor=uiState.edit();
+		editor.putString("Host", sHost);
+		editor.putInt("Port", iPort);
+		
+		editor.commit();
+	}
+    
+    private void InitSystemSettings()
+	{
+		SharedPreferences settings=getSharedPreferences(SHAREDPREFERENCES,Activity.MODE_PRIVATE);
+		sHost=settings.getString("Host", "127.0.0.1");
+        iPort=settings.getInt("Port",2222);
+        
+	}
+}

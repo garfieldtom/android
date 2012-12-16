@@ -1,0 +1,39 @@
+ANDROID StrictMode 使用 
+分类： android 2011-12-05 19:15 441人阅读 评论(1) 收藏 举报 
+ANR窗口产生的原因是多种多样的。程序的主线程因为IO读写或网络阻塞而导致被阻塞了，外部存储设备被独占了或系统负荷（load）过高（即不是自己编写的程序的问题，可能是系统或者其他第三方程序导致的问题），都有可能导致ANR窗口的出现。
+从Android 2.3开始提供了一个新的类StrictMode，可以帮助开发者改进他们的Android应用，StrictMode可以用于捕捉发生在应用程序主线程 中耗时的磁盘、网络访问或函数调用，可以帮助开发者使其改进程序，使主线程处理UI和动画在磁盘读写和网络操作时变得更平滑，
+避免主线程被阻塞，导致ANR窗口的发生。
+下面简要说明下Android 2.3新特性StrictMode限制模式的工作方式，见下面的代码：
+01 public void onCreate() { 
+
+02      if (DEVELOPER_MODE) { 
+
+03          StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder() 
+
+04                  .detectDiskReads() 
+
+05                  .detectDiskWrites() 
+
+06                  .detectNetwork()   // 这里可以替换为detectAll() 就包括了磁盘读写和网络I/O 
+
+07                  .penaltyLog()   //打印logcat，当然也可以定位到dropbox，通过文件保存相应的log 
+
+08                  .build()); 
+
+09          StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder() 
+
+10                  .detectLeakedSqlLiteObjects() //探测SQLite数据库操作 
+
+11                  .penaltyLog()  //打印logcat 
+
+12                  .penaltyDeath() 
+
+13                  .build()); 
+
+14      } 
+
+15      super.onCreate(); 
+
+16  } 
+
+上述代码可以在Application的OnCreate中添加，这样就能在程序启动的最初一刻进行监控了。

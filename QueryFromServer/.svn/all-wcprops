@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 46
+/svn/CallMonitor/!svn/ver/19/trunk/CallMonitor
+END
+.classpath
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/CallMonitor/!svn/ver/2/trunk/CallMonitor/.classpath
+END
+project.properties
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/CallMonitor/!svn/ver/24/trunk/CallMonitor/project.properties
+END
+.project
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/CallMonitor/!svn/ver/2/trunk/CallMonitor/.project
+END
+proguard-project.txt
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/CallMonitor/!svn/ver/2/trunk/CallMonitor/proguard-project.txt
+END
+AndroidManifest.xml
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/CallMonitor/!svn/ver/24/trunk/CallMonitor/AndroidManifest.xml
+END
+ic_launcher-web.png
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/CallMonitor/!svn/ver/2/trunk/CallMonitor/ic_launcher-web.png
+END

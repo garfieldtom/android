@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">QueryFromServer</string>
+    <string name="hello_world">移动查询系统</string>
+    <string name="menu_settings">设置</string>
+    <string name="title_activity_main">移动查询系统</string>
+    <string name="save">保存</string>
+    <string name="cancel">取消</string>
+    <string name="host">主机地址</string>
+    <string name="port">主机端口</string>
+    <string name="title_activity_system_set">系统设置</string>
+    <string name="btnsystemset">系统设置</string>
+    <string name="btnhide">隐藏</string>
+    <string name="btnclose">关闭</string>
+    <string name="pstate">电话状态</string>
+    <string name="aboutinfo">Copyright By Garfield</string>
+    <string name="title_activity_about">关于</string>
+    <string name="btnabout">关于</string>
+    <string name="copyright">Copyright By Garfield</string>
+    <string name="btntest">测试</string>
+    <string name="title_activity_query">QueryActivity</string>
+
+</resources>
